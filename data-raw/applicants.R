@@ -8,7 +8,8 @@ library(usethis)
 
 page <- read_html("https://www.ssa.gov/oact/babynames/numberUSbirths.html")
 
-ssa <- page %>% html_nodes("table") %>% .[[2]] %>% html_table() %>% tbl_df()
+ssa <- page %>% html_table() %>% as.data.frame()  %>% tibble::as_tibble(.name_repair = "unique")
+
 names(ssa) <- c("year", "M", "F", "total")
 ssa$total <- NULL
 

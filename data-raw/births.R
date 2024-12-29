@@ -10,13 +10,13 @@ if (!file.exists("data-raw/02HS0013.xls")) {
 
 raw <- readxl::read_excel('data-raw/02HS0013.xls',
   range = "A16:B117",
-  col_names = FALSE,
+  col_names = c("year", "births"),
   na = "(NA)"
 )
 births <- raw %>%
   transmute(
-    year = parse_integer(X__1),
-    births = X__2 * 1e3) %>%
+    year = parse_integer(year),
+    births = births * 1e3) %>%
   filter(!is.na(births))
 
 # 2002 - 2012 Manually extracted from
@@ -25,6 +25,7 @@ births <- raw %>%
 # https://www.cdc.gov/nchs/data/nvsr/nvsr66/nvsr66_01.pdf
 # 2016 - 2017 manually extracted from
 # https://www.cdc.gov/nchs/data/nvsr/nvsr67/nvsr67_08-508.pdf, page 12 (Table 1)
+# 2018 - 2023 extracted from CDC Wonder, https://wonder.cdc.gov/natality.html , Natality, 2007-2023 Results,
 recent <- tribble(
   ~year, ~births,
   2002,  4021726,
@@ -42,7 +43,13 @@ recent <- tribble(
   2014,  3988076,
   2015,  3978497,
   2016,  3945875,
-  2017,  3855500
+  2017,  3855500,
+  2018,	3791712,
+  2019,	3747540,
+  2020,	3613647,
+  2021,	3664292,
+  2022,	3667758,
+  2023,	3596017
 )
 
 births <- births %>%
